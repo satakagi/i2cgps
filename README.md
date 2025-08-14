@@ -18,7 +18,7 @@ https://github.com/ckuethe/i2cgps　をフォークして開発しました。�
 * chirimen piZero環境で[サンプルコード(ドライバ付き)](./chirimen/main.js)を実行すると、データが出力されます
 
 ## 実体配線図
-実体配線図 ![](hardware/i2c-GY-NEO6MV2.png)
+![実体配線図](hardware/i2c-GY-NEO6MV2.png)
 
 ## ライセンス
 ライセンスは原作者さんが明示していないので・・・　[The TAPR Open Hardware License](https://tapr.org/the-tapr-open-hardware-license/)を提示しておきます。
