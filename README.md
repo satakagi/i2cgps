@@ -10,6 +10,11 @@ https://github.com/ckuethe/i2cgps　をフォークして開発しました。�
 * 実体配線図：[hardware](./hardware)
 * 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
 
+## 準備するもの
+* GPSレシーバ(GY-NEO6MV2で確認しています)
+* Arduiono Pro Mini 3.3V (8MHz) （もしくはその互換ボード）：この配線図通りで動かすには3.3V版が必要です
+* [Chirimen Pi Zero 環境](https://tutorial.chirimen.org/pizero/)
+
 ## 動かし方
 * ファームウェアの書き込み：Arduino Mini Pro 3.3V(もしくはその互換ボード)にUSB-シリアル(専用のものが安価に流通しています)に、ArduinoIDEで[i2cgps.ino](./i2cgps.ino)を書き込みます
 * 実体配線図のようにつなぎます
