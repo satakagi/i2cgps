@@ -11,7 +11,7 @@ https://github.com/ckuethe/i2cgps をフォークして開発しました。そ�
 * 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
 
 ## 準備するもの
-* GPSレシーバ(GY-NEO6MV2で確認しています)
+* GPSレシーバ([GY-NEO6MV2](https://electronicwork.shop/items/625c1ca99fe3d707d725cbe1)で確認しています)
 * Arduiono Pro Mini 3.3V (8MHz) （もしくはその互換ボード）：この配線図通りで動かすには3.3V版が必要です ([互換ボードは数百円](https://electronicwork.shop/items/64e2182be37f74003b45e342)で購入できると思います)
 * Arduiono Pro Miniにファームウェア(スケッチ)を書き込むための環境(ハードとしてはFTDI USBシリアル変換アダプター([数百円](https://electronicwork.shop/items/63412a95c15c5a192180482f)で買えると思います)が必要です)
 * [Chirimen Pi Zero 環境](https://tutorial.chirimen.org/pizero/)
