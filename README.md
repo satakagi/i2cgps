@@ -2,7 +2,7 @@
 
 これは一般的なGPSレシーバ (GY-NEO6MV2など、UART 9600bpsでNMEA0183形式のデータを出力する。3.3Vでも動くもの) をI2Cインターフェースで使用できるようにするものです。メインコンピューターのUARTに余裕がないときに便利かもしれません。Arduino Mini Pro 3.3V (8MHz)でI2Cに変換しています。GY-NEO6MV2+CHIRIMEN PiZero環境で動作確認をしました。
 
-https://github.com/ckuethe/i2cgps　をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
+https://github.com/ckuethe/i2cgps をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
 ただ、私のArduino環境ではオリジナルのソース(.ino)はうまく動かなかったので一度作り直しています。
 
 また、以下を追加しています。
@@ -12,7 +12,8 @@ https://github.com/ckuethe/i2cgps　をフォークして開発しました。�
 
 ## 準備するもの
 * GPSレシーバ(GY-NEO6MV2で確認しています)
-* Arduiono Pro Mini 3.3V (8MHz) （もしくはその互換ボード）：この配線図通りで動かすには3.3V版が必要です
+* Arduiono Pro Mini 3.3V (8MHz) （もしくはその互換ボード）：この配線図通りで動かすには3.3V版が必要です ([互換ボードは数百円](https://electronicwork.shop/items/64e2182be37f74003b45e342)で購入できると思います)
+* Arduiono Pro Miniにファームウェア(スケッチ)を書き込むための環境(ハードとしてはFTDI USBシリアル変換アダプター([数百円](https://electronicwork.shop/items/63412a95c15c5a192180482f)で買えると思います)が必要です)
 * [Chirimen Pi Zero 環境](https://tutorial.chirimen.org/pizero/)
 
 ## 動かし方
