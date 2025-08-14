@@ -11,11 +11,11 @@ https://github.com/ckuethe/i2cgps　をフォークして開発しました。�
 * 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
 
 ## 動かし方
-* ファームウェアの書き込み：Arduino Mini Pro 3.3V(もしくはその互換ボード)にUSB-シリアル(専用のものが安価でで出回っています)で、[i2cgps.ino][./i2cgps.ino]を書き込みます
+* ファームウェアの書き込み：Arduino Mini Pro 3.3V(もしくはその互換ボード)にUSB-シリアル(専用のものが安価でで出回っています)で、[i2cgps.ino](./i2cgps.ino)を書き込みます
 * 実体配線図のようにつなぎます
 * GPSレシーバが測位できていなくても、空のデータが送信されてくるため、Arduino側のLEDは点滅するはずです（点滅していないときはどこかに問題がある）
 * 測位できるとGPSレシーバ側のLEDも点滅します(GY-NEO6MV2の場合)
-* chirimen piZero環境で(サンプルコード(ドライバ付き))[chirimen/main.js]を実行すると、データが出力されます
+* chirimen piZero環境で[サンプルコード(ドライバ付き)](./chirimen/main.js)を実行すると、データが出力されます
 
 ## 実体配線図
 実体配線図 ![](hardware/i2c-GY-NEO6MV2.png)
