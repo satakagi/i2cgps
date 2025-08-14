@@ -1,6 +1,8 @@
 # I2CGPS
 
-これは安価なGPSレシーバ(GY-NEO6MV2など、UART 9600bpsでNMEA0183形式のデータを出力する。3.3Vでも動くもの)をI2Cインターフェースで使用できるようにするものです。メインコンピューターのUARTに余裕がないときに便利かもしれません。Arduino Mini Pro 3.3V (8MHz)でI2Cに変換しています。
+これは一般的なGPSレシーバ (GY-NEO6MV2など、UART 9600bpsでNMEA0183形式のデータを出力する。3.3Vでも動くもの) をI2Cインターフェースで使用できるようにするものです。メインコンピューターのUARTに余裕がないときに便利かもしれません。Arduino Mini Pro 3.3V (8MHz)でI2Cに変換しています。GY-NEO6MV2+CHIRIMEN PiZero環境で動作確認をしました。
+
+
 
 https://github.com/ckuethe/i2cgps
 をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
