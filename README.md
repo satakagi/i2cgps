@@ -25,7 +25,7 @@ https://github.com/ckuethe/i2cgps　をフォークして開発しました。�
 
 ---
 
-## 以下は原作者 ckuetheさん)の作成されたREADMEです。
+## 以下は原作者 (ckuetheさん)の作成されたREADMEです。
 
 From time to time you want to attach a GPS to a microcontroller and
 you're already using all the serial ports. Luckily we have another bus:
