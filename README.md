@@ -2,23 +2,30 @@
 
 これは一般的なGPSレシーバ (GY-NEO6MV2など、UART 9600bpsでNMEA0183形式のデータを出力する。3.3Vでも動くもの) をI2Cインターフェースで使用できるようにするものです。メインコンピューターのUARTに余裕がないときに便利かもしれません。Arduino Mini Pro 3.3V (8MHz)でI2Cに変換しています。GY-NEO6MV2+CHIRIMEN PiZero環境で動作確認をしました。
 
-
-
-https://github.com/ckuethe/i2cgps
-をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
-ただ、私のArduino環境ではうまく動かなかったので一度作り直しています。
+https://github.com/ckuethe/i2cgps　をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
+ただ、私のArduino環境ではオリジナルのソース(.ino)はうまく動かなかったので一度作り直しています。
 
 また、以下を追加しています。
 * [chirimen](https://www.chirimen.org)用のドライバとサンプル：[chirimen](./chirimen/)ディレクトリ
 * 実体配線図：[hardware](./hardware)
 * 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
 
-# ライセンス
+## 動かし方
+* ファームウェアの書き込み：Arduino Mini Pro 3.3V(もしくはその互換ボード)にUSB-シリアル(専用のものが安価でで出回っています)で、[i2cgps.ino][./i2cgps.ino]を書き込みます
+* 実体配線図のようにつなぎます
+* GPSレシーバが測位できていなくても、空のデータが送信されてくるため、Arduino側のLEDは点滅するはずです（点滅していないときはどこかに問題がある）
+* 測位できるとGPSレシーバ側のLEDも点滅します(GY-NEO6MV2の場合)
+* chirimen piZero環境で(サンプルコード(ドライバ付き))[chirimen/main.js]を実行すると、データが出力されます
+
+## 実体配線図
+実体配線図 ![](hardware/i2c-GY-NEO6MV2.png)
+
+## ライセンス
 ライセンスは原作者さんが明示していないので・・・　(The TAPR Open Hardware License)[https://tapr.org/the-tapr-open-hardware-license/]を提示しておきます。
 
 ---
 
-# 以下は原作者 ckuetheさん)の作成されたREADMEです。
+## 以下は原作者 ckuetheさん)の作成されたREADMEです。
 
 From time to time you want to attach a GPS to a microcontroller and
 you're already using all the serial ports. Luckily we have another bus:
