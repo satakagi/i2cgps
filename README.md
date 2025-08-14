@@ -1,5 +1,7 @@
 # I2CGPS
 
+これは安価なGPSレシーバ(GY-NEO6MV2など、UART 9600bpsでNMEA0183形式のデータを出力する。3.3Vでも動くもの)をI2Cインターフェースで使用できるようにするものです。メインコンピューターのUARTに余裕がないときに便利かもしれません。Arduino Mini Pro 3.3V (8MHz)でI2Cに変換しています。
+
 https://github.com/ckuethe/i2cgps
 をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
 ただ、私のArduino環境ではうまく動かなかったので一度作り直しています。
@@ -8,6 +10,9 @@ https://github.com/ckuethe/i2cgps
 * [chirimen](https://www.chirimen.org)用のドライバとサンプル：[chirimen](./chirimen/)ディレクトリ
 * 実体配線図：[hardware](./hardware)
 * 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
+
+# ライセンス
+ライセンスは原作者さんが明示していないので・・・　(The TAPR Open Hardware License)[https://tapr.org/the-tapr-open-hardware-license/]を提示しておきます。
 
 ---
 
