@@ -1,5 +1,18 @@
 # I2CGPS
 
+https://github.com/ckuethe/i2cgps
+をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
+ただ、私のArduino環境ではうまく動かなかったので一度作り直しています。
+
+また、以下を追加しています。
+* [chirimen](https://www.chirimen.org)用のドライバとサンプル：[chirimen](./chirimen/)ディレクトリ
+* 実体配線図：[hardware](./hardware)
+* 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
+
+---
+
+# 以下は原作者 ckuetheさん)の作成されたREADMEです。
+
 From time to time you want to attach a GPS to a microcontroller and
 you're already using all the serial ports. Luckily we have another bus:
 I2C. You could call it a kind of a controller-area-network, given that
