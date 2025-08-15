@@ -10,7 +10,7 @@ https://github.com/ckuethe/i2cgps をフォークして開発しました。そ�
 また、以下を追加しています。
 * [chirimen](https://www.chirimen.org)用のドライバとサンプル：[chirimen](./chirimen/)ディレクトリ
 * 実体配線図：[hardware](./hardware)
-* 未検証ですが・・KiCadのプリント基板設計図：[hardware/kiCad](./hardware/kiCad)
+* 未検証ですが・・KiCadのプリント基板設計図：[hardware/KiCad/](./hardware/KiCad/)
 
 ## 準備するもの
 * GPSレシーバ([GY-NEO6MV2](https://electronicwork.shop/items/625c1ca99fe3d707d725cbe1)で確認しています)
