@@ -5,6 +5,8 @@
 https://github.com/ckuethe/i2cgps をフォークして開発しました。そのため、i2cのインターフェース仕様はフォーク元に準じます。
 ただ、私のArduino環境ではオリジナルのソース(.ino)はうまく動かなかったので一度作り直しています。
 
+原作者さんはATTiny85への移行を目指したようですが未達、この実装もArduino(ATMega248)用です。
+
 また、以下を追加しています。
 * [chirimen](https://www.chirimen.org)用のドライバとサンプル：[chirimen](./chirimen/)ディレクトリ
 * 実体配線図：[hardware](./hardware)
