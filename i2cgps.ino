@@ -1,31 +1,20 @@
 /*
- * Yet Another I2C GPS firmware.
- * 
- * Because we have a whole microcontroller with ram 'n' stuff, it is possible
- * to parse the data on the AVR, and just send back a struct over i2c
+ * Yet Another I2C GPS firmware with TinyGPSPlus
  *
- * On the Wemos D1 Mini/Micropython end:
- *    SCL = D1 / GPIO5 / Pin(5) / phy_pin(20)
- *    SDA = D2 / GPIO4 / Pin(4) / phy_pin(14)
- * 
- * On the OSEPP Pro Mini, there are two extra holes for the I2C port. A4 (SDA)
- * is closer to the AVR, and A5 (SCL) A5 is closer to the FTDI header. Arduino
- * calls those pins 27 and 28 and the Wire library just assumes it can use them.
+ * TinyGPSPlusライブラリを使用してGPSデータを解析し、
+ * I2C経由でデータを送信するファームウェアです。
+ * NeoSWSerialでソフトウェアシリアル通信を行います。
  *
- */
-/*
- * Yet Another I2C GPS firmware
- *
- * NeoGPSでGPSデータを解析し、I2C経由でデータを送信します。
- * NeoSWSerialを使用して、ソフトウェアシリアル通信を行います。
+ * 【変更点】
+ * ・使用ライブラリをNeoGPSからTinyGPSPlusに変更。(日付がおかしかった)
+ * ・ライブラリのバージョン互換性のため、基本的な機能に絞って実装。
+ * ・I2C送信時の緯度・経度データの計算方法を修正し、精度を向上。
  */
 
 #include <Wire.h>
-#include <WireData.h> // I2Cで構造体を送信するためのライブラリ
-
-// ソフトウェアシリアルライブラリをインクルード
+#include <WireData.h>
 #include <NeoSWSerial.h>
-#include <NMEAGPS.h>
+#include <TinyGPSPlus.h> // TinyGPSPlusライブラリをインクルード
 
 // GPSモジュールのボーレート
 const long GPS_BAUD_RATE = 9600;
@@ -34,19 +23,17 @@ const long GPS_BAUD_RATE = 9600;
 const long PC_BAUD_RATE = 57600;
 
 // I2Cアドレス
-const int i2c_addr = 0x58; // 'X' marks the spot.
+const int i2c_addr = 0x58;
 
 // GPSモジュールのRXピンとTXピンを設定
-// TXピン(19)は未使用
 NeoSWSerial gpsPort(10, 19); 
 
-// NeoGPSオブジェクトの宣言
-NMEAGPS gps;
-gps_fix fix;
+// TinyGPSPlusオブジェクトの宣言
+TinyGPSPlus gps;
 
 // I2Cで送信するデータ構造体
 typedef struct fix {
-  uint8_t fixlen; // 構造体のサイズ
+  uint8_t fixlen;
   uint8_t status;
   uint16_t year;
   uint8_t month, day, hour, minute, second;
@@ -60,17 +47,30 @@ static Fix_t i2c_fix;
 
 // I2Cリクエストハンドラ
 void i2c_position_request() {
-  i2c_fix.status = fix.status;
-  i2c_fix.lat = fix.latitudeL();
-  i2c_fix.lon = fix.longitudeL();
-  i2c_fix.alt = fix.altitude_cm();
-  i2c_fix.speed = fix.speed_mkn();
-  i2c_fix.year = fix.dateTime.year;
-  i2c_fix.month = fix.dateTime.month;
-  i2c_fix.day = fix.dateTime.day;
-  i2c_fix.hour = fix.dateTime.hours;
-  i2c_fix.minute = fix.dateTime.minutes;
-  i2c_fix.second = fix.dateTime.seconds;
+  i2c_fix.fixlen = sizeof(i2c_fix);
+  
+  // TinyGPSPlusのデータで構造体を埋める
+  i2c_fix.status = (uint8_t)gps.location.isValid(); // isValid()を使用
+  
+  // 緯度・経度データをrawLat/rawLngのdegとbillionthsから計算
+  // 10^-7の単位で整数として送信
+  RawDegrees latRaw = gps.location.rawLat();
+  RawDegrees lngRaw = gps.location.rawLng();
+  i2c_fix.lat = latRaw.deg * 10000000L + latRaw.billionths / 100L;
+  i2c_fix.lon = lngRaw.deg * 10000000L + lngRaw.billionths / 100L;
+  if (latRaw.negative) i2c_fix.lat = -i2c_fix.lat;
+  if (lngRaw.negative) i2c_fix.lon = -i2c_fix.lon;
+
+  i2c_fix.alt = gps.altitude.meters() * 100; // 高度をメートルからセンチメートルに変換
+  i2c_fix.speed = gps.speed.kmph() * 10; // km/hの10倍として速度を取得
+
+  // TinyGPSPlusから日時情報を取得
+  i2c_fix.year = gps.date.year();
+  i2c_fix.month = gps.date.month();
+  i2c_fix.day = gps.date.day();
+  i2c_fix.hour = gps.time.hour();
+  i2c_fix.minute = gps.time.minute();
+  i2c_fix.second = gps.time.second();
   
   // I2C経由で構造体を送信
   wireWriteData(i2c_fix);
@@ -78,15 +78,12 @@ void i2c_position_request() {
 
 
 void setup() {
-  // PCとのシリアル通信を開始
   Serial.begin(PC_BAUD_RATE);
   Serial.println("Arduino Pro Mini has started.");
   Serial.println("Waiting for GPS data...");
   
-  // GPSモジュールとの通信を開始
   gpsPort.begin(GPS_BAUD_RATE);
   
-  // I2C通信を開始
   i2c_fix.fixlen = sizeof(i2c_fix);
   Wire.begin(i2c_addr);
   Wire.onRequest(i2c_position_request);
@@ -97,34 +94,39 @@ void setup() {
 
 void loop() {
   // GPSポートにデータが届いていれば、
-  // NeoGPSでデータを解析する
-  if (gps.available(gpsPort)) {
-    // 解析済みのデータを取得
-    fix = gps.read();
-    
-    // LEDを点滅させて、正常に受信・解析されていることを示す
+  // TinyGPSPlusでデータを解析する
+  while (gpsPort.available()) {
+    gps.encode(gpsPort.read());
+  }
+  
+  // 新しいfixが取得できたら、シリアル出力
+  if (gps.location.isUpdated()) {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     
-    // デバッグ用のシリアル出力
     Serial.println("--------------------");
     Serial.print("Status: ");
-    Serial.println(fix.status);
+    Serial.println(gps.location.isValid()); // isValid()を出力
     Serial.print("Latitude: ");
-    Serial.println(fix.latitude(), 7);
+    Serial.println(gps.location.lat(), 7);
     Serial.print("Longitude: ");
-    Serial.println(fix.longitude(), 7);
+    Serial.println(gps.location.lng(), 7);
     Serial.print("Date: ");
-    Serial.print(fix.dateTime.year);
+    Serial.print(gps.date.year());
     Serial.print("/");
-    Serial.print(fix.dateTime.month);
+    Serial.print(gps.date.month());
     Serial.print("/");
-    Serial.print(fix.dateTime.day);
+    Serial.print(gps.date.day());
     Serial.print(" ");
-    Serial.print(fix.dateTime.hours);
+    Serial.print(gps.time.hour());
     Serial.print(":");
-    Serial.print(fix.dateTime.minutes);
+    Serial.print(gps.time.minute());
     Serial.print(":");
-    Serial.println(fix.dateTime.seconds);
+    Serial.println(gps.time.second());
+    
+    // DOP情報をシリアル出力に追加
+    Serial.print("HDOP: ");
+    Serial.println(gps.hdop.value() / 100.0, 2);
+    
     Serial.println("--------------------");
   }
 }
