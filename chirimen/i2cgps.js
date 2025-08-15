@@ -35,7 +35,7 @@ I2CGPS.prototype = {
 
         var len = mdata[0]; // should br 25
         var stat = mdata[1];
-        var year = 2000 + this.getInt16(mdata[2], mdata[3]);
+        var year = this.getInt16(mdata[2], mdata[3]);
         var month = mdata[4];
         var day = mdata[5];
         var hour = mdata[6];
